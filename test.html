@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecruitConnect - Test Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            color: white;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 70px);
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        #getStartedBtn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        #getStartedBtn:hover {
+            transform: scale(1.05);
+        }
+        
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        
+        #modalOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        #modalCard {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        #closeBtn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .modal-section {
+            display: none;
+        }
+        
+        .modal-section.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .role-cards {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .role-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .role-card:hover {
+            border-color: #667eea;
+            background: #f9fafb;
+        }
+        
+        .role-card .icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .input-error {
+            border-color: #ef4444 !important;
+        }
+        
+        .field-error {
+            display: block;
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .error-message {
+            display: none;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        button[type="submit"], .btn-primary {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        button[type="submit"]:hover, .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        button[type="submit"]:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .success-screen {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .success-screen .checkmark {
+            font-size: 5rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+        
+        .success-screen h2 {
+            color: #10b981;
+        }
+        
+        .success-screen p {
+            color: #6b7280;
+            margin: 1rem 0 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h3>RecruitConnect</h3>
+    </nav>
+    
+    <div class="hero">
+        <h1>Find Your Next Opportunity</h1>
+        <p>Connecting top talent with leading companies</p>
+        <button id="getStartedBtn">Get Started</button>
+    </div>
+    
+    <!-- Modal -->
+    <div id="modal">
+        <div id="modalOverlay"></div>
+        <div id="modalCard">
+            <button id="closeBtn">&times;</button>
+            
+            <!-- Role Selection -->
+            <div id="roleSelection" class="modal-section active">
+                <h2>Join As</h2>
+                <div class="role-cards">
+                    <div class="role-card" id="candidateCard">
+                        <div class="icon">🟢</div>
+                        <p><strong>I'm a Candidate</strong><br>Looking for a job</p>
+                    </div>
+                    <div class="role-card" id="clientCard">
+                        <div class="icon">🔵</div>
+                        <p><strong>I'm a Client</strong><br>Looking to hire</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Candidate Form -->
+            <div id="candidateForm" class="modal-section">
+                <button class="back-btn" id="candidateBack">← Back</button>
+                <h2>Candidate Registration</h2>
+                <div id="candidateError" class="error-message"></div>
+                <form>
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" name="full_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label>Skills</label>
+                        <input type="text" name="skills" placeholder="e.g. JavaScript, Python">
+                    </div>
+                    <div class="form-group">
+                        <label>Experience</label>
+                        <input type="text" name="experience" placeholder="e.g. 2 years">
+                    </div>
+                    <button type="submit" id="candidateSubmit">Register as Candidate</button>
+                </form>
+            </div>
+            
+            <!-- Client Form -->
+            <div id="clientForm" class="modal-section">
+                <button class="back-btn" id="clientBack">← Back</button>
+                <h2>Client Registration</h2>
+                <div id="clientError" class="error-message"></div>
+                <form>
+                    <div class="form-group">
+                        <label>Company Name *</label>
+                        <input type="text" name="company_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>HR Name *</label>
+                        <input type="text" name="hr_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Requirements</label>
+                        <textarea name="requirements" rows="3"></textarea>
+                    </div>
+                    <button type="submit" id="clientSubmit">Register as Client</button>
+                </form>
+            </div>
+            
+            <!-- Success Screen -->
+            <div id="successScreen" class="modal-section">
+                <div class="success-screen">
+                    <div class="checkmark">✅</div>
+                    <h2>Registration Successful!</h2>
+                    <p>We'll get in touch with you soon.</p>
+                    <button class="btn-primary">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        // Modal controls
+        const modal = document.getElementById('modal');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const candidateCard = document.getElementById('candidateCard');
+        const clientCard = document.getElementById('clientCard');
+        const candidateBack = document.getElementById('candidateBack');
+        const clientBack = document.getElementById('clientBack');
+        
+        function showModal() {
+            modal.style.display = 'block';
+        }
+        
+        function hideModal() {
+            modal.style.display = 'none';
+            showSection('roleSelection');
+        }
+        
+        getStartedBtn.addEventListener('click', showModal);
+        closeBtn.addEventListener('click', hideModal);
+        modalOverlay.addEventListener('click', hideModal);
+        
+        candidateCard.addEventListener('click', () => showSection('candidateForm'));
+        clientCard.addEventListener('click', () => showSection('clientForm'));
+        candidateBack.addEventListener('click', () => showSection('roleSelection'));
+        clientBack.addEventListener('click', () => showSection('roleSelection'));
+    </script>
+</body>
+</html>
