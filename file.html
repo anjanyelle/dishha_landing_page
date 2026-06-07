@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dishha Careers</title>
+
+    <meta name="description" content="Explore career opportunities with Dishha Staffing Services.">
+    <meta name="robots" content="index, follow">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #fff;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .error-message {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .error-message h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .error-message p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .error-message a {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .error-message a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="iframe-container">
+
+        <iframe
+            id="careerFrame"
+            src="https://career.dishha.com"
+            title="Dishha Careers"
+            loading="eager"
+            allowfullscreen>
+        </iframe>
+
+        <div class="error-message" id="fallback">
+            <h2>Careers Portal</h2>
+            <p>
+                If the careers portal cannot be displayed inside this page,
+                please open it directly.
+            </p>
+
+            <a href="https://career.dishha.com" target="_blank">
+                Open Careers Portal
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        const iframe = document.getElementById('careerFrame');
+
+        iframe.onerror = function () {
+            document.getElementById('fallback').style.display = 'block';
+        };
+
+        setTimeout(() => {
+            try {
+                const test = iframe.contentWindow.location.href;
+            } catch (e) {
+                document.getElementById('fallback').style.display = 'block';
+            }
+        }, 3000);
+    </script>
+
+</body>
+</html>
